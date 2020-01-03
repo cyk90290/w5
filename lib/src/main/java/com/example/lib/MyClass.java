@@ -2,34 +2,97 @@ package com.example.lib;
 import java.util.Scanner;
 public class MyClass {
 
-    public static void main(String[] args) {
-        int Year=0,Month=0,Day=0,TotalDay=0;
-        int MonthDay[]={31,28,31,30,31,30,31,31,30,31,30,31};
-        boolean LeapYear=false;
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("請輸入西元年 月 日");
-        Year = scanner.nextInt();
-        Month = scanner.nextInt();
-        Day = scanner.nextInt();
-        if(Year%4!=0)
-            LeapYear=false;
-        else if(Year%100!=0)
-            LeapYear=true;
-        else if(Year%400!=0)
-            LeapYear=false;
-        else
-            LeapYear=true;
-        if(LeapYear==true)
-            MonthDay[1]=29;
-        if(Month>12)
-            System.out.println("請輸入正確月份!");
-        else if(MonthDay[Month-1]<Day)
-            System.out.printf("輸入錯誤!!%d年的%d月只有%d天\n",Year,Month,MonthDay[Month-1]);
+    Scanner scanner = new Scanner(System.in);
+    private String Decimal = "";
+    private char Sample[][] = {{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'},
+            {'0', '1'}, {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}};
+    private String Binary = "";
+    private String Hexadecimal = "";
+
+    public void setDecimal(String decimal) {
+        Decimal = decimal;
+    }
+
+    public void setBinary(String binary) {
+        Binary = binary;
+    }
+
+    public void setHexadecimal(String hexadecimal) {
+        Hexadecimal = hexadecimal;
+    }
+
+    public void DecimalConversion() {
+        System.out.println("請輸入十進位數");
+        setDecimal(scanner.next());
+        if (Judge("Decimal", Decimal) == false)
+            System.out.println("輸入錯誤請輸入正確的十進位數");
+
         else {
-            for(int i=Month-2;i>=0;--i){
-                TotalDay+=MonthDay[i];
-            }
-            TotalDay+=Day;
-            System.out.printf("這天是今年第%d天\n",TotalDay);
+            int DecimalInt = Integer.parseInt(Decimal);
+            Binary = Integer.toBinaryString(DecimalInt);
+            Hexadecimal = Integer.toHexString(DecimalInt);
+            System.out.println("二進制:"+Binary);
+            System.out.println("十六進制:"+Hexadecimal);
         }
+    }
+    public void BinaryConversion() {
+        System.out.println("請輸入二進位數");
+        setBinary(scanner.next());
+        if (Judge("Binary", Binary) == false)
+            System.out.println("輸入錯誤請輸入正確的二進位數");
+
+        else {
+            int DecimalInt = Integer.valueOf(Binary,2);
+            Decimal = Integer.toString(DecimalInt);
+            Hexadecimal = Integer.toHexString(DecimalInt);
+            System.out.println("十進制:"+Decimal);
+            System.out.println("十六進制:"+Hexadecimal);
+        }
+    }
+    public void HexadecimalConversion() {
+        System.out.println("請輸入十六進位數");
+        setHexadecimal(scanner.next());
+        if (Judge("Hexadecimal", Hexadecimal) == false)
+            System.out.println("輸入錯誤請輸入正確的十六進位數");
+
+        else {
+            int DecimalInt = Integer.valueOf(Hexadecimal,16);
+            Decimal = Integer.toString(DecimalInt);
+            Binary = Integer.toBinaryString(DecimalInt);
+            System.out.println("十進制:"+Decimal);
+            System.out.println("二進制:"+Binary);
+        }
+    }
+
+
+    public boolean Judge(String Type, String Number) {
+        boolean JudgeBoolean = true;
+        int k = -1;
+        int length = 0;
+        if (Type.matches("Decimal")) {
+            k = 0;
+            length = 10;
+        } else if (Type.matches("Binary")) {
+            k = 1;
+            length = 2;
+        } else if (Type.matches("Hexadecimal")) {
+            k = 2;
+            length = 16;
+        }
+        if (k == 0 || k == 1 || k == 2) {
+            for (int i = Number.length() - 1; i >= 0; i--) {
+                int JudgeCount = 0;
+                for (int j = 0; j < length; j++) {
+                    if (Number.charAt(i) != Sample[k][j]) {
+                        JudgeCount++;
+                    }
+                    if (JudgeCount == length) {
+                        JudgeBoolean = false;
+                    }
+                }
+            }
+        } else
+            JudgeBoolean = false;
+
+        return JudgeBoolean;
     }}
